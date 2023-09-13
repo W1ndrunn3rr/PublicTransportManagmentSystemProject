@@ -4,6 +4,7 @@
 
 #include "ticket.h"
 int main() {
-  srand(time(NULL));
-  printf("%s", GenerateTicketID());
+  TimeTicket T = CreateTimeTicket(193, 90);
+  TargetTicket R;
+  printf("%s", T.acessibleTime);
 }

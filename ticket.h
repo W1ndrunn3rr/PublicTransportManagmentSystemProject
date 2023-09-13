@@ -2,17 +2,17 @@
 
 typedef struct TimeTicket {
   float price;
-  float acessibleTime;
-  char boughtHour[3];
-  char boughtDate[5];
+  char acessibleTime[11];
+  char boughtHour[6];
+  char boughtDate[11];
   char ID[11];
 } TimeTicket;
 
 typedef struct TargetTicket {
   float price;
-  char boughtHour[3];
+  char boughtHour[6];
   int targetID;
-  char boughtDate[5];
+  char boughtDate[11];
   char ID[11];
 } TargetTicket;
 

@@ -3,12 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "time.h"
+#include <time.h>
 
 char *GenerateTicketID() {
-  static char id[11];
+  char *id = (char *)(malloc(11 * sizeof(char)));
   char alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+  // *Generator losowego id
   for (int i = 0; i < 11; i++) {
     int seed = rand() % 19;
     int alphabetSeed = rand() % sizeof(alphabet);
@@ -20,15 +21,16 @@ char *GenerateTicketID() {
   return id;
 }
 
-char *GetHour() {
-  char *actualTime = (char *)malloc(6 * sizeof(char));
-  if (actualTime == NULL) {
-    return NULL;
-  }
-
+char *GetActualTime() {
+  // *time.h - dokumentation
   time_t now;
   struct tm *now_tm;
   int hour, minutes;
+  char *actualTime = (char *)malloc(6 * sizeof(char));
+
+  if (actualTime == NULL) {
+    return NULL;
+  }
 
   now = time(NULL);
   now_tm = localtime(&now);
@@ -40,18 +42,18 @@ char *GetHour() {
   return actualTime;
 }
 
-char *GetDate() {
+char *GetActualDate() {
+  int day, month, year;
+  time_t now;
+  struct tm *now_tm;
   char *actualDate = (char *)malloc(11 * sizeof(char));
+
   if (actualDate == NULL) {
     return NULL;
   }
 
-  time_t now;
-  struct tm *now_tm;
   now = time(NULL);
   now_tm = localtime(&now);
-  int day, month, year;
-
   day = now_tm->tm_mday;
   month = now_tm->tm_mon + 1;
   year = now_tm->tm_year + 1900;
@@ -62,16 +64,16 @@ char *GetDate() {
 }
 
 //  *TODO Zrobić obsługę dodania dnia na następny po przekroczeniu godziny 00:00
-
-char *CalculateAcessTime(float duration) {
+// Calculating time of ticket
+char *CalculateAccessTime(float duration) {
   char *actualTime = (char *)malloc(6 * sizeof(char));
-  if (actualTime == NULL) {
-    return NULL;
-  }
-
   time_t now;
   struct tm *now_tm;
   int hour, minutes;
+
+  if (actualTime == NULL) {
+    return NULL;
+  }
 
   now = time(NULL);
   now_tm = localtime(&now);
@@ -87,27 +89,26 @@ char *CalculateAcessTime(float duration) {
     hour -= 24;
   }
 
-  // Convert integers to character representation and null-terminate the
-  // string
   sprintf(actualTime, "%02d:%02d", hour, minutes);
 
   return actualTime;
 }
 
-TimeTicket CreateTimeTicket(int targetSerialNumber, float duration) {
+TimeTicket CreateTimeTicket(float duration) {
   TimeTicket ticket;
-  strncpy(ticket.acessibleTime, CalculateAcessTime(duration), 11);
-  strncpy(ticket.boughtHour, GetHour(), 6);
-  strncpy(ticket.boughtDate, GetDate(), 11);
+  strncpy(ticket.acessibleTime, CalculateAccessTime(duration), 11);
+  strncpy(ticket.boughtHour, GetActualTime(), 6);
+  strncpy(ticket.boughtDate, GetActualDate(), 11);
   strncpy(ticket.ID, GenerateTicketID(), 11);
   ticket.price = 1.5 + duration / 15;
   return ticket;
 }
+
 TargetTicket CreateTargetTicket(int targetSerialNumber) {
   TargetTicket ticket;
   ticket.targetID = targetSerialNumber;
-  strncpy(ticket.boughtHour, GetHour(), 6);
-  strncpy(ticket.boughtDate, GetDate(), 11);
+  strncpy(ticket.boughtHour, GetActualTime(), 6);
+  strncpy(ticket.boughtDate, GetActualDate(), 11);
   strncpy(ticket.ID, GenerateTicketID(), 11);
   ticket.price = 3;
   return ticket;

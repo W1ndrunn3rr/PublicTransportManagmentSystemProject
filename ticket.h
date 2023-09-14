@@ -1,5 +1,3 @@
-#include "transport.h"
-
 typedef struct TimeTicket {
   float price;
   char acessibleTime[11];
@@ -18,6 +16,4 @@ typedef struct TargetTicket {
 
 TargetTicket CreateTargetTicket(int targetSerialNumber);
 
-TimeTicket CreateTimeTicket(int targetSerialNumber, float duration);
-
-char *GenerateTicketID();
+TimeTicket CreateTimeTicket(float duration);

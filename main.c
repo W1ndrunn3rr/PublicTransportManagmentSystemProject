@@ -3,8 +3,20 @@
 #include <time.h>
 
 #include "ticket.h"
+#include "transport.h"
 int main() {
-  TimeTicket T = CreateTimeTicket(193, 90);
+  ConnectionGraph *conGraph = CreateConnectionGraph(5);
+  TimeTicket T = CreateTimeTicket(90);
   TargetTicket R;
-  printf("%s", T.acessibleTime);
+  // printf("%s", T.acessibleTime);
+  ConnectionNode *tmp = conGraph->connectionList[1];
+  while (tmp != NULL) {
+    if (tmp->nextVerge == NULL) {
+      printf("%s", tmp->vergeName);
+      break;
+    }
+    printf("%s->", tmp->vergeName);
+    tmp = tmp->nextVerge;
+  }
+  return 0;
 }
